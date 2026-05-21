@@ -26,7 +26,6 @@
 ## O que faremos diferente na Sprint 3
 - Implementar testes antes do código (TDD)
 - Testes unitários e de integração para todos os endpoints
-- Code review obrigatório antes de merge
 - Integrar testes automatizados na pipeline
 - Meta: Reduzir Change Failure Rate para menos de 10%
 

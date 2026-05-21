@@ -4,7 +4,6 @@
 - **Data Início:** 18 de Abril de 2026
 - **Data Fim:** 17 de Maio de 2026
 - **Duração:** 29 dias
-- **Sprint Atual:** Sprint 1 (concluída)
 
 ### Dados Coletados
 
