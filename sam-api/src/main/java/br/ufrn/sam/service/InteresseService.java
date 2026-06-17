@@ -26,22 +26,20 @@ public class InteresseService {
         this.turmaRepository = turmaRepository;
     }
 
-    public InteresseModel cadastrar(Integer idAluno, Integer idTurma) {
-        // busca o aluno pelo id
-        AlunoModel aluno = alunoRepository.findById(idAluno)
-                .orElseThrow(() -> new NoSuchElementException("Aluno não encontrado: " + idAluno));
+    public InteresseModel cadastrar(String matricula, String codigoTurma) {
+        // busca o aluno pela matrícula
+        AlunoModel aluno = alunoRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new NoSuchElementException("Aluno não encontrado: " + matricula));
 
-        // busca a turma pelo id
-        TurmaModel turma = turmaRepository.findById(idTurma)
-                .orElseThrow(() -> new NoSuchElementException("Turma não encontrada: " + idTurma));
+        // busca a turma pelo código
+        TurmaModel turma = turmaRepository.findByCodigo(codigoTurma)
+                .orElseThrow(() -> new NoSuchElementException("Turma não encontrada: " + codigoTurma));
 
         // verifica se já existe interesse do aluno nessa turma
-        if (!interesseRepository.findByAlunoIdAluno(idAluno).isEmpty()) {
-            List<InteresseModel> interesses = interesseRepository.findByAlunoIdAluno(idAluno);
-            for (InteresseModel i : interesses) {
-                if (i.getTurma().getIdTurma().equals(idTurma)) {
-                    throw new IllegalArgumentException("Aluno já manifestou interesse nessa turma!");
-                }
+        List<InteresseModel> interesses = interesseRepository.findByAlunoIdAluno(aluno.getIdAluno());
+        for (InteresseModel i : interesses) {
+            if (i.getTurma().getCodigo().equals(codigoTurma)) {
+                throw new IllegalArgumentException("Aluno já manifestou interesse nessa turma!");
             }
         }
 
@@ -55,12 +53,16 @@ public class InteresseService {
         return interesseRepository.save(interesse);
     }
 
-    public List<InteresseModel> listarPorAluno(Integer idAluno) {
-        return interesseRepository.findByAlunoIdAluno(idAluno);
+    public List<InteresseModel> listarPorAluno(String matricula) {
+        AlunoModel aluno = alunoRepository.findByMatricula(matricula)
+                .orElseThrow(() -> new NoSuchElementException("Aluno não encontrado: " + matricula));
+        return interesseRepository.findByAlunoIdAluno(aluno.getIdAluno());
     }
 
-    public List<InteresseModel> listarPorTurma(Integer idTurma) {
-        return interesseRepository.findByTurmaIdTurma(idTurma);
+    public List<InteresseModel> listarPorTurma(String codigoTurma) {
+        TurmaModel turma = turmaRepository.findByCodigo(codigoTurma)
+                .orElseThrow(() -> new NoSuchElementException("Turma não encontrada: " + codigoTurma));
+        return interesseRepository.findByTurmaIdTurma(turma.getIdTurma());
     }
 
     public List<InteresseModel> listarTodos() {
