@@ -30,6 +30,9 @@ public class AlunoModel extends PessoaModel {
     private Integer periodo;
 
     @Column(nullable = false)
+    private String curso;
+
+    @Column(nullable = false)
     private Boolean isConcluinte;
 
     public AlunoModel() {}
@@ -64,6 +67,9 @@ public class AlunoModel extends PessoaModel {
 
     public Integer getPeriodo() { return periodo; }
     public void setPeriodo(Integer periodo) { this.periodo = periodo; }
+
+    public String getCurso() { return curso; }
+    public void setCurso(String curso) { this.curso = curso; }
 
     public Boolean getIsConcluinte() { return isConcluinte; }
     public void setIsConcluinte(Boolean isConcluinte) { this.isConcluinte = isConcluinte; }

@@ -4,6 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import br.ufrn.sam.model.AlunoModel;
+import br.ufrn.sam.model.PessoaModel;
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class RenderController {
     @GetMapping("/dashboardAluno")
@@ -19,7 +23,24 @@ public class RenderController {
         return "pages/ranking";
     }
     @GetMapping("/configuracoes")
-    public String configuracoes(Model model) {
+    public String configuracoes(HttpSession session, Model model) {
+        PessoaModel usuarioLogado = (PessoaModel) session.getAttribute("usuarioLogado");
+
+        // Se ninguém estiver logado, manda de volta para a página inicial
+        if (usuarioLogado == null) {
+            return "redirect:/";
+        }
+
+        if (usuarioLogado.getIsAluno()) {
+            AlunoModel aluno = (AlunoModel) usuarioLogado;
+            model.addAttribute("aluno", aluno);
+        }   
         return "pages/configuracoes";
+    }
+    @GetMapping("/logout")
+    public String fazerLogout(HttpSession session) {
+        session.invalidate();
+        
+        return "redirect:/sam"; 
     }
 }
