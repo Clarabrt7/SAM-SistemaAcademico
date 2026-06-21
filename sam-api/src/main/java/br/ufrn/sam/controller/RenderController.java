@@ -1,27 +1,61 @@
 package br.ufrn.sam.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import br.ufrn.sam.model.AlunoModel;
+import br.ufrn.sam.model.InteresseModel;
 import br.ufrn.sam.model.PessoaModel;
+import br.ufrn.sam.model.TurmaModel;
+import br.ufrn.sam.service.InteresseService;
+import br.ufrn.sam.service.TurmaService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class RenderController {
+
+    private final TurmaService turmaService;
+    private final InteresseService interesseService;
+    
+
+    public RenderController(TurmaService turmaService, InteresseService interesseService) {
+        this.turmaService = turmaService;
+        this.interesseService = interesseService;
+    }
+    
     @GetMapping("/dashboardAluno")
-    public String dashboardAluno(Model model) {
+    public String dashboardAluno(HttpSession session, Model model) {
+        PessoaModel usuarioLogado = (PessoaModel) session.getAttribute("usuarioLogado");
+
+        if (usuarioLogado == null || !usuarioLogado.getIsAluno()) {
+            return "redirect:/";
+        }
+
+        AlunoModel aluno = (AlunoModel) usuarioLogado;
+        model.addAttribute("aluno", aluno);
+
+        List<InteresseModel> meusInteresses = interesseService.listarPorAluno(aluno.getMatricula());
+        model.addAttribute("interesses", meusInteresses);
+
         return "pages/dashboardAluno";
     }
+
     @GetMapping("/turmas")
     public String turmas(Model model) {
+        List<TurmaModel> listaDeTurmas = turmaService.listarTodas();
+        model.addAttribute("turmas", listaDeTurmas);
+        
         return "pages/turmas";
     }
+
     @GetMapping("/ranking")
     public String ranking(Model model) {
         return "pages/ranking";
     }
+
     @GetMapping("/configuracoes")
     public String configuracoes(HttpSession session, Model model) {
         PessoaModel usuarioLogado = (PessoaModel) session.getAttribute("usuarioLogado");
@@ -37,6 +71,7 @@ public class RenderController {
         }   
         return "pages/configuracoes";
     }
+
     @GetMapping("/logout")
     public String fazerLogout(HttpSession session) {
         session.invalidate();

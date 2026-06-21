@@ -35,7 +35,9 @@
             </div>
         </div>
         <div class="row g-4">
-            <div th:replace="~{fragment/cardTurma :: cardTurma}"></div>
+           <th:block th:each="turma : ${turmas}">
+                <div th:replace="~{fragment/cardTurma :: cardTurma} ?: ~{}" th:with="turma=${turma}"></div>
+            </th:block>
         </div>
     </section>
 </div>

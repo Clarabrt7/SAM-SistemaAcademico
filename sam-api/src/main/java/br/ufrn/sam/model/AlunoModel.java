@@ -13,6 +13,8 @@ import jakarta.persistence.Table;
 @Table(name = "aluno")
 public class AlunoModel extends PessoaModel {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAluno;
 
     @Column(nullable = false, unique = true)

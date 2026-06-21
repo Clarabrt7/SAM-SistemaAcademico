@@ -2,17 +2,17 @@
     <section>
         <div class="d-flex justify-content-between align-items-center my-5">
             <div>
-                <h2 class="fw-bold mb-1">Olá, Natálya Gabriele 👋</h2>
-                <p class="text-muted mb-0">Matrícula: 20240023849 | 4º Período</p>
+                <h2 class="fw-bold mb-1" th:text="'Olá, ' + ${aluno.getNome()} + ' 👋'"></h2>
+                <p class="text-muted mb-0" th:text="'Matrícula: ' + ${aluno.getMatricula()} + ' | 4º Período'"></p>
             </div>
             <div class="d-flex gap-3">
                 <div class="stat-box text-center">
                     <span class="d-block text-muted" style="font-size: 0.75rem; font-weight: 600;">IRA</span>
-                    <strong class="text-primary">9.2</strong>
+                    <strong class="text-primary" th:text="${aluno.getIra()}"></strong>
                 </div>
                 <div class="stat-box text-center">
                     <span class="d-block text-muted" style="font-size: 0.75rem; font-weight: 600;">IEA</span>
-                    <strong class="text-success">8.8</strong>
+                    <strong class="text-success" th:text="${aluno.getIea()}"></strong>
                 </div>
             </div>
         </div>
@@ -37,22 +37,23 @@
                         <h6 class="fw-bold mb-0">Meus Interesses</h6>
                     </div>
                     <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <span class="d-block fw-bold" style="font-size: 0.9rem;">Processos de Software</span>
-                                <small class="text-muted">Turma 02</small>
+                        <div th:each="interesse, iterStat : ${interesses}">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <span class="d-block fw-bold" style="font-size: 0.9rem;"
+                                        th:text="${interesse.turma.disciplina.nome}">Nome da Disciplina</span>
+                                    <small class="text-muted" th:text="${interesse.turma.codigo}">Código da
+                                        Turma</small>
+                                </div>
+                                <span class="badge-soft-success"
+                                    th:text="|${interesse.posicaoLista != null ? interesse.posicaoLista : '-'}º de ${interesse.turma.capacidade}|">Posição</span>
                             </div>
-                            <span class="badge-soft-success">15º de 40</span>
+
+                            <hr th:if="${!iterStat.last}" class="text-muted opacity-25">
                         </div>
 
-                        <hr class="text-muted opacity-25">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="d-block fw-bold" style="font-size: 0.9rem;">Estrutura de Dados II</span>
-                                <small class="text-muted">Turma 01</small>
-                            </div>
-                            <span class="badge-soft-danger"><i class="bi bi-exclamation-triangle"></i> Choque</span>
+                        <div th:if="${#lists.isEmpty(interesses)}" class="text-center py-3">
+                            <small class="text-muted">Você ainda não demonstrou interesse em nenhuma turma.</small>
                         </div>
                     </div>
                 </div>
@@ -61,7 +62,8 @@
             <div class="col-lg-8">
                 <div class="card h-100">
                     <div class="card-header bg-white pt-4 px-4 d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold mb-0"><i class="bi bi-calendar-event text-primary me-2"></i> Grade Semanal</h6>
+                        <h6 class="fw-bold mb-0"><i class="bi bi-calendar-event text-primary me-2"></i> Grade Semanal
+                        </h6>
                     </div>
                     <div class="card-body p-4">
                         <div class="table-responsive">
