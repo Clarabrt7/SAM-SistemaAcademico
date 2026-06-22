@@ -20,7 +20,7 @@ public class TurmaModel {
     private Integer idTurma;
 
     @Column(nullable = false)
-    private Integer numero; // Substituiu o 'codigo' e o 'nome' (ex: 1, 2, 3...)
+    private Integer numero;
 
     @Column(nullable = false, length = 30)
     private String horario;
