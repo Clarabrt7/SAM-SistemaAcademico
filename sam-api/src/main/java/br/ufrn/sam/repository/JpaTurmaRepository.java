@@ -17,4 +17,5 @@ public interface JpaTurmaRepository extends JpaRepository<TurmaModel, Integer> {
         Integer numero
     );
     List<TurmaModel> findByHorarioContaining(String horario);
+    List<TurmaModel> findByProfessorNomeContainingIgnoreCase(String nome);
 }

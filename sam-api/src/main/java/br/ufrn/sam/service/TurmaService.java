@@ -106,4 +106,11 @@ public class TurmaService {
     }
     return turmaRepository.findByHorarioContaining(horario);
 }
+
+public List<TurmaModel> filtrarPorProfessor(String nome) {
+    if (nome == null || nome.trim().isEmpty()) {
+        return turmaRepository.findAll();
+    }
+    return turmaRepository.findByProfessorNomeContainingIgnoreCase(nome);
+    }
 }
