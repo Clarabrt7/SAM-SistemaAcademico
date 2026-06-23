@@ -36,21 +36,23 @@
         </div>
 
         <div class="row g-4">
-            <div th:each="turma : ${todasAsTurmas}" class="col-md-4">
-                <div th:replace="~{fragment/cardTurma :: cardTurma(turma=${turma})}"></div>
-            </div>
-            <div th:if="${#lists.isEmpty(todasAsTurmas)}" class="text-muted text-center py-5">
+            <th:block th:each="turma : ${turmas}">
+                <div class="col-12 col-md-4">
+                    <div th:replace="~{fragment/cardTurma :: cardTurma}" th:with="turma=${turma}"></div>
+                </div>
+            </th:block>
+
+            <div th:if="${#lists.isEmpty(turmas)}" class="text-muted text-center py-5">
                 Nenhuma turma disponível na oferta deste semestre.
             </div>
         </div>
 
-        <div class="row g-4">
-            <div th:each="turma : ${todasAsTurmas}" class="col-md-4">
-                <div th:replace="~{fragment/cardTurma :: cardTurma(turma=${turma})}"></div>
-            </div>
-        </div>
-
+        
         <script>
+            //Script deve ser analisado e verificado
+
+
+
             // Essa função deve ser chamada no 'onclick' do botão dentro do seu 'fragment/cardTurma.html'
             // Exemplo no fragmento: <button th:onclick="'selecionarTurma(\'' + ${turma.idTurma} + '\')'">Selecionar</button>
 

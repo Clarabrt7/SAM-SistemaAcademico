@@ -1,5 +1,7 @@
 package br.ufrn.sam.controller;
 
+import java.util.List;
+
 import br.ufrn.sam.model.TurmaModel;
 import br.ufrn.sam.service.TurmaService;
 import org.springframework.stereotype.Controller;
@@ -9,24 +11,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.Set;
 import br.ufrn.sam.model.AlunoModel;
+import br.ufrn.sam.model.InteresseModel;
 import br.ufrn.sam.model.PessoaModel;
+import br.ufrn.sam.model.TurmaModel;
+import br.ufrn.sam.service.InteresseService;
+import br.ufrn.sam.service.TurmaService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class RenderController {
 
     private final TurmaService turmaService;
+    private final InteresseService interesseService;
+    
 
-    public RenderController(TurmaService turmaService) {
+    public RenderController(TurmaService turmaService, InteresseService interesseService) {
         this.turmaService = turmaService;
+        this.interesseService = interesseService;
     }
-
+    
     @GetMapping("/dashboardAluno")
     public String dashboardAluno(HttpSession session, Model model) {
         PessoaModel usuarioLogado = (PessoaModel) session.getAttribute("usuarioLogado");
 
         if (usuarioLogado == null || !usuarioLogado.getIsAluno()) {
-            return "redirect:/"; // Se não tiver logado, manda pro login
+            return "redirect:/sam"; // Se não tiver logado, manda pro login
         }
 
         AlunoModel aluno = (AlunoModel) usuarioLogado;
@@ -34,17 +43,21 @@ public class RenderController {
         List<TurmaModel> turmasDoAluno = turmaService.listarTurmasPorInteresseAluno(aluno.getMatricula());
 
         Set<Integer> idsEmConflito = turmaService.verificarConflitos(turmasDoAluno);
+        List<InteresseModel> meusInteresses = interesseService.listarPorAluno(aluno.getMatricula());
 
         model.addAttribute("aluno", aluno);
         model.addAttribute("turmasInteresse", turmasDoAluno);
         model.addAttribute("idsEmConflito", idsEmConflito);
+        model.addAttribute("interesses", meusInteresses);
 
         return "pages/dashboardAluno";
     }
 
     @GetMapping("/turmas")
     public String turmas(Model model) {
-        model.addAttribute("todasAsTurmas", turmaService.listarTodas());
+        List<TurmaModel> listaDeTurmas = turmaService.listarTodas();
+        model.addAttribute("turmas", listaDeTurmas);
+        
         return "pages/turmas";
     }
 
