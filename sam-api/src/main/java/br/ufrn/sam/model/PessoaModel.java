@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "pessoa")
@@ -22,10 +23,13 @@ public class PessoaModel {
     // IDENTITY = o banco gera o id automaticamente (auto increment)
 	private int idPessoa;
 	
+
 	@Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String login;
 	
 	@Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 	
 	@Column(nullable = false)
