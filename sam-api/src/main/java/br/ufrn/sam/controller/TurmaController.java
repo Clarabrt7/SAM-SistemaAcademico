@@ -36,4 +36,10 @@ public class TurmaController {
     public ResponseEntity<List<TurmaModel>> listar() {
         return ResponseEntity.ok(turmaService.listarTodas());
     }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<TurmaModel>> filtrarPorHorario(@RequestParam String horario) {
+        List<TurmaModel> turmas = turmaService.filtrarPorHorario(horario);
+        return ResponseEntity.ok(turmas);
+    }
 }

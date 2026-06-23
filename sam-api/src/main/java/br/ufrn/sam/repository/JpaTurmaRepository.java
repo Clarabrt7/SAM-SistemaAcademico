@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface JpaTurmaRepository extends JpaRepository<TurmaModel, Integer> {
@@ -15,4 +16,5 @@ public interface JpaTurmaRepository extends JpaRepository<TurmaModel, Integer> {
         Integer semestre, 
         Integer numero
     );
+    List<TurmaModel> findByHorarioContaining(String horario);
 }

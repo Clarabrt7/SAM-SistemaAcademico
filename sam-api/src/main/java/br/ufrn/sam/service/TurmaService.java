@@ -100,4 +100,10 @@ public class TurmaService {
         }
         return turmasComConflito;
     }
+    public List<TurmaModel> filtrarPorHorario(String horario) {
+    if (horario == null || horario.trim().isEmpty()) {
+        return turmaRepository.findAll(); // Se não passar nada, lista todas
+    }
+    return turmaRepository.findByHorarioContaining(horario);
+}
 }
