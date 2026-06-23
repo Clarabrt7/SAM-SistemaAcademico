@@ -11,8 +11,6 @@ import jakarta.persistence.Table;
 @Table(name = "professor")
 public class ProfessorModel extends PessoaModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProfessor;
 
     @Column(nullable = false, unique = true, length = 15)

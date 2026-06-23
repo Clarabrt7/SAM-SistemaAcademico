@@ -34,10 +34,62 @@
                 </div>
             </div>
         </div>
+
         <div class="row g-4">
-           <th:block th:each="turma : ${turmas}">
-                <div th:replace="~{fragment/cardTurma :: cardTurma} ?: ~{}" th:with="turma=${turma}"></div>
+            <th:block th:each="turma : ${turmas}">
+                <div class="col-12 col-md-4">
+                    <div th:replace="~{fragment/cardTurma :: cardTurma}" th:with="turma=${turma}"></div>
+                </div>
             </th:block>
+
+            <div th:if="${#lists.isEmpty(turmas)}" class="text-muted text-center py-5">
+                Nenhuma turma disponível na oferta deste semestre.
+            </div>
         </div>
+
+        
+        <script>
+            //Script deve ser analisado e verificado
+
+
+
+            // Essa função deve ser chamada no 'onclick' do botão dentro do seu 'fragment/cardTurma.html'
+            // Exemplo no fragmento: <button th:onclick="'selecionarTurma(\'' + ${turma.idTurma} + '\')'">Selecionar</button>
+
+            function selecionarTurma(idTurma) {
+                // Pegue a matrícula do aluno logado (aqui está chumbada conforme seu layout, adapte se necessário)
+                const matriculaAluno = "20240023849";
+
+                // 1. Consulta a API para simular o choque de horário ANTES de salvar
+                fetch(`/api/interesses/aluno/${matriculaAluno}/simular-conflito/${idTurma}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.conflito) {
+                            // 2. ALERTA VISUAL IMEDIATO: Mostra o erro e interrompe
+                            alert("⚠️ ATENÇÃO: Esta disciplina possui choque de horário com outra que você já selecionou! A nota será impossível de cumprir.");
+                            // Obs: Se você usar SweetAlert2 no projeto, troque o alert() por Swal.fire('Oops...', 'Choque de horário!', 'error');
+                        } else {
+                            // 3. Se não tiver conflito, prossegue para cadastrar o interesse
+                            cadastrarInteresse(matriculaAluno, idTurma);
+                        }
+                    })
+                    .catch(error => console.error('Erro ao verificar conflito:', error));
+            }
+
+            // Função auxiliar para de fato realizar a seleção após passar pela validação
+            function cadastrarInteresse(matricula, idTurma) {
+                fetch(`/api/interesses/${matricula}/${idTurma}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(response => {
+                    if (response.ok) {
+                        alert("✅ Turma adicionada com sucesso à sua grade!");
+                        window.location.reload(); // Recarrega para atualizar o botão/lista
+                    } else {
+                        alert("❌ Erro ao adicionar turma. Você já pode estar matriculado.");
+                    }
+                });
+            }
+        </script>
     </section>
 </div>

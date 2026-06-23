@@ -2,10 +2,14 @@ package br.ufrn.sam.controller;
 
 import java.util.List;
 
+import br.ufrn.sam.model.TurmaModel;
+import br.ufrn.sam.service.TurmaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+import java.util.Set;
 import br.ufrn.sam.model.AlunoModel;
 import br.ufrn.sam.model.InteresseModel;
 import br.ufrn.sam.model.PessoaModel;
@@ -31,13 +35,19 @@ public class RenderController {
         PessoaModel usuarioLogado = (PessoaModel) session.getAttribute("usuarioLogado");
 
         if (usuarioLogado == null || !usuarioLogado.getIsAluno()) {
-            return "redirect:/";
+            return "redirect:/sam"; // Se não tiver logado, manda pro login
         }
 
         AlunoModel aluno = (AlunoModel) usuarioLogado;
-        model.addAttribute("aluno", aluno);
 
+        List<TurmaModel> turmasDoAluno = turmaService.listarTurmasPorInteresseAluno(aluno.getMatricula());
+
+        Set<Integer> idsEmConflito = turmaService.verificarConflitos(turmasDoAluno);
         List<InteresseModel> meusInteresses = interesseService.listarPorAluno(aluno.getMatricula());
+
+        model.addAttribute("aluno", aluno);
+        model.addAttribute("turmasInteresse", turmasDoAluno);
+        model.addAttribute("idsEmConflito", idsEmConflito);
         model.addAttribute("interesses", meusInteresses);
 
         return "pages/dashboardAluno";
@@ -68,14 +78,14 @@ public class RenderController {
         if (usuarioLogado.getIsAluno()) {
             AlunoModel aluno = (AlunoModel) usuarioLogado;
             model.addAttribute("aluno", aluno);
-        }   
+        }
         return "pages/configuracoes";
     }
 
     @GetMapping("/logout")
     public String fazerLogout(HttpSession session) {
         session.invalidate();
-        
-        return "redirect:/sam"; 
+
+        return "redirect:/sam";
     }
 }
