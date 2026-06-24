@@ -102,7 +102,7 @@ public class TurmaService {
     }
     public List<TurmaModel> filtrarPorHorario(String horario) {
     if (horario == null || horario.trim().isEmpty()) {
-        return turmaRepository.findAll(); // Se não passar nada, lista todas
+        return turmaRepository.findAll();
     }
     return turmaRepository.findByHorarioContaining(horario);
 }
@@ -112,5 +112,12 @@ public List<TurmaModel> filtrarPorProfessor(String nome) {
         return turmaRepository.findAll();
     }
     return turmaRepository.findByProfessorNomeContainingIgnoreCase(nome);
+    }
+
+public List<TurmaModel> filtrarPorDisciplina(String busca) {
+    if (busca == null || busca.trim().isEmpty()) {
+        return turmaRepository.findAll();
+    }
+    return turmaRepository.findByDisciplinaCodigoContainingIgnoreCaseOrDisciplinaNomeContainingIgnoreCase(busca, busca);
     }
 }

@@ -37,16 +37,19 @@ public class TurmaController {
         return ResponseEntity.ok(turmaService.listarTodas());
     }
 
-    @GetMapping("/filtrar")
+    @GetMapping("/filtrar-horario")
     public ResponseEntity<List<TurmaModel>> filtrarPorHorario(@RequestParam String horario) {
         List<TurmaModel> turmas = turmaService.filtrarPorHorario(horario);
         return ResponseEntity.ok(turmas);
-
-    
     }
     @GetMapping("/filtrar-professor")
     public ResponseEntity<List<TurmaModel>> filtrarPorProfessor(@RequestParam String nome) {
         List<TurmaModel> turmas = turmaService.filtrarPorProfessor(nome);
         return ResponseEntity.ok(turmas);
-}
+    }
+    @GetMapping("/filtrar-disciplina")
+    public ResponseEntity<List<TurmaModel>> filtrarPorDisciplina(@RequestParam String busca) {
+        List<TurmaModel> turmas = turmaService.filtrarPorDisciplina(busca);
+        return ResponseEntity.ok(turmas);
+    }
 }
